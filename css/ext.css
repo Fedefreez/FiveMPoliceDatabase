@@ -1,0 +1,43 @@
+.logout-btn {
+  background-color: #e04a3f;
+  border: none;
+}
+.menu-title {
+    color: #41434d;
+    clear: both;
+    display: block;
+    font-family: 'Open Sans';
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 50px;
+    padding-left: 20%;
+    text-transform: uppercase;
+    width: 100%;
+  }
+
+.pos-right {
+  position: relative;
+  float: right;
+}
+
+.noborder {
+  border: none;
+}
+
+.citiz-info-container {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.citiz-info-subclass {
+  order: 0;
+}
+
+.citiz-info-subclass-status {
+  order: 1;
+}
+
+.citiz-info-subclass-info {
+  order: 2;
+}
