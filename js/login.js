@@ -4,7 +4,7 @@ function login() {
     $.post("php/login.php", {"pin": pin}, function (e) {
       e = JSON.parse(e);
       if (e["status"] === "success" && e["accepted"] === "true") {
-        window.location.href = "session/";
+        window.location.href = "intermission/";
       } else if (e["accepted"] === "false") {
         d_err("Credenziali incorrette.");
       } else if (e["status"] === "failure"){

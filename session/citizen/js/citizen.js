@@ -19,7 +19,6 @@ function d_not(msg) {
 }
 
 function registerCitizen() {
-  //// TODO: lavoro cittadino
   var name = $("#citizenName").val();
   var surname = $("#citizenSurname").val();
   switch ($("#citizenGender").val()) {
@@ -37,10 +36,11 @@ function registerCitizen() {
       break;
   }
   var dob = $("#citizenDOB").val();
-  var gunLicense = $("#gunLicense").prop("checked");
+  var gunLicense = $("#gunLicense").attr("class").includes("success");
   var status = ($("#status").attr("class").includes("danger") ? 2 : 1);
+  var jobId = localStorage.getItem("jobId");
 
-  if (name == "" || name == undefined || surname == "" || surname == undefined || dob == "" || dob == undefined) {
+  if (name == "" || name == undefined || surname == "" || surname == undefined || dob == "" || dob == undefined || jobId == "" || jobId == undefined) {
     d_err("I dati inseriti non sono validi. Controllare di aver compilato tutti i campi.");
   } else {
     data = {
@@ -48,13 +48,14 @@ function registerCitizen() {
       "surname": surname,
       "gender": gender,
       "dob": dob,
+      "job_id": jobId,
       "gun_license": gunLicense,
       "status": status
     }
     $.post("../../php/register_citizen.php", data, function(e) {
       e = JSON.parse(e);
       if (e["status"] === "success") {
-        d_not("Registrazione effettuata con successo.");
+        window.location.href = "../?action=registrationSuccessful";
       } else if (e["status"] === "failure"){
         d_err("Registrazione fallita. Il server ha risposto con: " + e["reason"]);
       } else {
@@ -71,5 +72,18 @@ function toggleStatus() {
     $("#status").attr("class", "btn btn-outline-danger").html("Ricercato");
   } else {
     $("#status").attr("class", "btn btn-outline-success").html("Non Ricercato");
+  }
+}
+
+function setJob(jobName, jobId) {
+  $("#citizenJob").val(jobName);
+  localStorage.setItem("jobId", jobId);
+}
+
+function toggleGunLicense() {
+  if ($("#gunLicense").attr("class").includes("success")) {
+    $("#gunLicense").html("Porto d'armi non valido").attr("class", "btn btn-outline-danger");
+  } else {
+    $("#gunLicense").html("Porto d'armi valido").attr("class", "btn btn-outline-success");
   }
 }
