@@ -7,9 +7,8 @@
     $data = htmlspecialchars($data);
 
     if (empty($data)) {
-      die(json_encode(["status"=>"failure", "reason"=>"Nessun dato inviato."]));
+      die(json_encode(["status"=>"failure", "reason"=>"Nessun dato ricevuto."]));
     }
-
     return $data;
   }
 
@@ -22,14 +21,11 @@
     }
   }
 
-
-
   if ($_SERVER["REQUEST_METHOD"] == "POST" && loginCheck()) {
-    $citizen_id = test_input($_POST["id"]);
-    $wanted = test_input($_POST["wanted"]);
+    $citizen_id = test_input($_POST["citizen_id"]);
 
-    echo json_encode(setCitizenStatus($citizen_id, ($wanted === "true" ? 2 : 1)));
+    echo json_encode(getCitizenInfo($citizen_id));
   } else {
     echo json_encode(["status"=>"failure", "reason"=>"Invalid request."]);
   }
- ?>
+?>

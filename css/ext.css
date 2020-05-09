@@ -34,10 +34,16 @@
   order: 0;
 }
 
-.citiz-info-subclass-status {
+.citiz-info-subclass-info {
   order: 1;
 }
 
-.citiz-info-subclass-info {
-  order: 2;
+.citiz-info-crime-date {
+  font-style: italic;
+  font-weight: bold;
+  padding-right: 1%;
+}
+.remove-crime-btn {
+  position: relative;
+  float: right;
 }

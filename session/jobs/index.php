@@ -1,8 +1,12 @@
 <?php session_start();
+  require "../../php/funs.php";
+
   if (!isset($_SESSION["user_uuid"]) || $_SESSION["user_uuid"] === "-1") {
     die("<script>window.location.href='/';</script>");
+  } else if (!isUserChief($_SESSION["user_uuid"])) {
+    die("<h1>Non sei autorizzato a visualizzare questa pagina. L'incidente é stato registrato.</h1>");
+    //todo registrazione incidenti
   }
-  require "../../php/funs.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,14 +16,15 @@
   <meta name="description" content="Menu Polizia TFR">
   <meta name="author" content="Fede">
 
-  <script>localStorage.clear();</script>
-
   <title>Database Polizia - TFR</title>
 
   <script src="../../vendor/jquery/jquery.min.js"></script>
 
   <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- <script src="../../vendor/jquery-ui/jquery-ui.js"></script> -->
+
+  <!--formden.js communicates with FormDen server to validate fields and submit via AJAX -->
+  <script type="text/javascript" src="https://formden.com/static/cdn/formden.js"></script>
 
   <!-- Special version of Bootstrap that is isolated to content wrapped in .bootstrap-iso -->
   <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
@@ -31,6 +36,7 @@
 
   <link href="../../css/sb.css" rel="stylesheet" />
   <link href="../../css/ext.css" rel="stylesheet" />
+  <link href="css/jobs.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.js"/>
   <!-- pref_ic -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -65,8 +71,8 @@
     margin: 0;
     }
   </style>
-  <link rel="stylesheet" href="css/citizen.css" />
-  <script src="js/citizen.js"></script>
+
+  <script src="js/jobs.js"></script>
 </head>
 
 <body>
@@ -82,11 +88,11 @@
 
         <span><span class="list-group-item" style='text-align: center;'><strong>Menu agente</strong></span><span>
         <a href="../" class="list-group-item list-group-item-action bg-light"><i class="fa fa-laptop" style="padding-right: 10px;"></i>Database</a>
-        <a class="list-group-item list-group-item-action bg-light"><i class="fa fa-plus" style="padding-right: 10px;"></i>Registra cittadino</a>
+        <a href="../citizen" class="list-group-item list-group-item-action bg-light"><i class="fa fa-plus" style="padding-right: 10px;"></i>Registra cittadino</a>
         <?php
             if (isUserChief($_SESSION["user_uuid"])) {
               echo "<a class='bg-light list-group-item' style='text-align: center;'><strong>Menu questore</strong></a><a href='../users' class='list-group-item list-group-item-action bg-light'><i class='fa fa-address-card' style='padding-right: 10px;'></i>Agenti</a>";
-              echo "<a href='../jobs' class='list-group-item list-group-item-action bg-light'><i class='fa fa-gear' style='padding-right: 10px;'></i>Gestione lavori</a>";
+              echo "<a class='list-group-item list-group-item-action bg-light'><i class='fa fa-gear' style='padding-right: 10px;'></i>Gestione lavori</a>";
             }
          ?>
 
@@ -130,69 +136,41 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page"><a href="../">Gestione database</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Cittadini</li>
-            <li class="breadcrumb-item active" aria-current="page">Registrazione nuovo cittadino</li>
+            <li class="breadcrumb-item active" aria-current="page">Lavori</li>
+            <li class="breadcrumb-item active" aria-current="page">Gestione lavori</li>
           </ol>
         </nav>
         <div class="animated fadeIn">
           <div class="row">
             <div class="col-sm-1" ></div>
             <div class="col-sm-10">
-              <div class="card">
-                <div class="card-header">Dati cittadino</div>
-                <div class="card-body card-block">
-                  <div class="row"><span class="col-sm-1"></span><input class="form-control col-sm-4" placeholder="Nome" id="citizenName"/><span class="col-sm-1"></span><input class="form-control col-sm-4" placeholder="Cognome" id="citizenSurname"/></div>
-                  <span class="col-sm-1"></span>
-                  <div class="row"><span class="col-sm-1"></span>
-                  <div class="input-group mb-3 col-sm-9">
-                    <div class="input-group-prepend">
-                      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sesso</button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" onclick="$('#citizenGender').val('Maschio');">Maschio</a>
-                        <a class="dropdown-item" onclick="$('#citizenGender').val('Femmina');">Femmina</a>
-                        <a class="dropdown-item" onclick="$('#citizenGender').val('Altro');">Altro</a>
-                      </div>
-                    </div>
-                    <input type="text" class="form-control" id="citizenGender" value="Maschio" disabled>
-                  </div>
+              <div class="card" id="jobList">
+                <div class="card-header">Lavori registrati</div>
+                <div class="card-body card-block" id="jobListJobsContainer">
+                  <?php
+                    if (($jobs = getAllJobs())["status"] === "success") {
+                      foreach ($jobs["jobs"] as $job) {
+                        echo '<li class="list-group-item" id="job' . $job["id"] . '">';
+                        echo '<div class="job-container"><span class="job-name">' . $job["name"] . '</span><span class="remove-job-btn-container"><button class="btn btn-danger" onclick="removeJob(' . $job["id"] . ');">Rimuovi</button></span></div></li>';
+                      }
+                    } else {
+                      echo $jobs["reason"];
+                    }
+                   ?>
                 </div>
-                <div class="row"><span class="col-sm-1"></span>
-                 <div class="input-group mb-3 col-sm-9">
-                  <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary" type="button"><i class="fa fa-calendar"></i><span style="padding-left: 5px;">Data di nascita</span></button>
-                   </div>
-                  <input class="form-control" id="citizenDOB" name="date" placeholder="Selezionare una data di nascita" type="text"/>
-                   </div>
-                </div>
-                <div class="row">
-                  <span class="col-sm-1"></span>
-                  <div class="input-group mb-3 col-sm-9">
-                    <div class="input-group-prepend">
-                      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-briefcase"></i><span style="padding-left: 5px;">Lavoro</span></button>
-                      <div class="dropdown-menu">
-                        <?php
-                          if (($jobs = getAllJobs())["status"] === "success") {
-                            foreach ($jobs["jobs"] as $job) {
-                              echo '<a class="dropdown-item" onclick="setJob(&quot;' . $job["name"] . "&quot;," . $job["id"] . ');">' . $job["name"] . '</a>';
-                            }
-                          } else {
-                            echo "<a class='dropdown-item'>Errore</a> <script>d_err('Errore nella rilevazione dei lavori. Il server ha risposto con: " . $jobs["reason"] . "');</script>";
-                          }
-                         ?>
-                      </div>
-                    </div>
-                    <input type="text" class="form-control" id="citizenJob" value="Disoccupato" disabled />
-                  </div>
-                </div>
-                <div class="row">
-                  <span class="col-sm-1"></span>
-                  <button onclick="toggleGunLicense();" id="gunLicense" class="btn btn-outline-danger">Porto d'armi Non Valido</button>
-                  <span class="col-sm-5"></span>
-                  <button class="btn btn-outline-success citiz-registraton-status" id="status" onclick="toggleStatus();">Non Ricercato</button>
-                </div>
+              <div class="card-footer">
+                <button class="btn btn-success" onclick="toggleJobAddition()">Aggiungi lavoro</button>
+              </div>
+            </div>
+            <div class="card" id="addJob" style="display: none;">
+              <div class="card-header">
+                Aggiungi lavoro
+              </div>
+              <div class="card-body card-block">
+                <input class="form-control" id="jobNameInput" />
               </div>
               <div class="card-footer">
-                <button class="btn btn-primary" onclick="registerCitizen()">Conferma</button>
+                <button class="btn btn-success" onclick="addJob();">Conferma</button>
               </div>
             </div>
           </div>
@@ -201,6 +179,7 @@
     </div>
     <!-- /#page-content-wrapper -->
 
+    </div>
   </div>
 
   <!-- /#wrapper -->
@@ -211,18 +190,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
   <script>
-    $(document).ready(function() {
-      $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-        if ($("#wrapper").attr("class").includes("toggled")) {
-          $(this).html("Apri menu");
-        } else {
-          $(this).html("Chiudi menu");
-        }
-      });
+    var toggled = false;
 
-      localStorage.setItem("jobId", 10);
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+      if (toggled) {
+        $(this).html("Chiudi menu");
+      } else {
+        $(this).html("Apri menu");
+      }
+      toggled = !toggled;
+    });
+    $(document).ready(function() {
       interval = setInterval(function() {
         if (document.getElementsByTagName('html')[0].getAttribute('class') === "translated-ltr") {
           d_err("Se le scritte all'interno del sito sembrano sfasate, disabilita Google Traduttore.");

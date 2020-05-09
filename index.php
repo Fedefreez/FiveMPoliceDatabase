@@ -13,15 +13,18 @@
 
   <title>Database Polizia - TFR</title>
 
-  <script src="vendor/jquery/jquery.min.js"></script>
-
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <link href="css/sb.css" rel="stylesheet" />
   <link href="css/ext.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.js"/>
   <!-- pref_ic -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- animated logo -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+  <script src="http://www.jqueryscript.net/demo/Image-Loading-Animation-Plugin-with-jQuery-CSS3-LoadGo/loadgo.js"></script>
+
 
   <!-- removing webkit -->
   <style>
@@ -96,23 +99,25 @@
 
       <div class="container-fluid">
         <div id="alerts"></div>
-        <br/>
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">Benvenuto nel database polizia v2.54<span style="position: fixed; right: 3%;">The Final Road</span></li>
-          </ol>
-        </nav>
-        <div class="animated fadeIn">
-          <div class="row">
-            <div class="col-sm-3" ></div>
-            <div class="col-sm-6">
-              <div class="card">
-                <div class="card-header">Accesso</div>
-                <div class="card-body card-block">
-                  <input type="number" class="form-control" placeholder="Inserire il pin..." id="user_pin"/>
-                </div>
-                <div class="card-footer">
-                  <button class="btn btn-primary" onclick="login()">Accedi</button>
+        <div id="loginWrapper">
+          <br/>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active" aria-current="page">Benvenuto nel database polizia v2.54</li>
+            </ol>
+          </nav>
+          <div class="animated fadeIn">
+            <div class="row">
+              <div class="col-sm-3" ></div>
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-header">Accesso</div>
+                  <div class="card-body card-block">
+                    <input type="number" class="form-control" placeholder="Inserire il pin..." id="user_pin"/>
+                  </div>
+                  <div class="card-footer">
+                    <button class="btn btn-primary" onclick="login()">Accedi</button><span style="position: relative; float: right; margin-top: 4px; color: #7a7a7a;">The Final Road</span>
+                  </div>
                 </div>
               </div>
             </div>

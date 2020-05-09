@@ -1,0 +1,16 @@
+.job-container {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  min-height: 38px;
+}
+
+.job-name {
+  order: 0;
+  padding-top: 5px;
+}
+
+.remove-job-btn-container {
+  order: 1;
+  float: right;
+}
