@@ -268,7 +268,7 @@ function updateCitizen() {
 }
 
 function setJob(name, id) {
-  $("#citizenInfoJob").value(name);
+  $("#citizInfoJob").val(name);
   localStorage.setItem("jobId", id);
 }
 
