@@ -81,9 +81,16 @@ function searchUser() {
           d_err("Decodifica JSON fallita. Ragione: "  + err.message);
         }
 
-        var items = $(".citiz-info-list-container").hide();
-        for (var i = 0; i < e["ids"].length; i++) {
-          $("#citizItem"+e["ids"][i]["id"]).show();
+
+        if (e["ids"].length === 0) {
+          $("#citizSearchNotFoundItem").show();
+        } else {
+          $("#citizSearchNotFoundItem").hide();
+          $(".citiz-info-list-container").hide();
+
+          for (var i = 0; i < e["ids"].length; i++) {
+            $("#citizItem"+e["ids"][i]["id"]).show();
+          }
         }
       }).fail(function() {
         d_err("Il server non risponde, forse a causa di un errore interno. Contatta un amministratore.");
@@ -95,6 +102,7 @@ function searchUser() {
 }
 
 function resetSearch() {
+  $("#citizSearchNotFoundItem").hide();
   var items = $(".citiz-info-list-container").show();
 }
 

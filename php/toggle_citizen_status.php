@@ -30,6 +30,6 @@
 
     echo json_encode(setCitizenStatus($citizen_id, ($wanted === "true" ? 2 : 1)));
   } else {
-    echo json_encode(["status"=>"failure", "reason"=>"Invalid request."]);
+    echo json_encode(["status"=>"failure", "reason"=>"Richiesta invalida."]);
   }
  ?>
