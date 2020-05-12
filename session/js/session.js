@@ -10,7 +10,11 @@ function logout() {
 
 function toggleStatus(citizId) {
   $.post("../php/toggle_citizen_status.php", {"id": citizId, "wanted": $("#citizBtn"+citizId).attr("class").includes("success")}, function(e) {
-    e = JSON.parse(e);
+    try {
+      e = JSON.parse(e);
+    } catch (err) {
+      d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+    }
     if (e["status"] === "Success") {
       if ($("#citizBtn"+citizId).attr("class").includes("success")) {
         $("#citizBtn"+citizId).attr("class", "citiz-info-subclass-status btn btn-outline-danger").html("Ricercato");
@@ -25,7 +29,11 @@ function toggleStatus(citizId) {
 
 function toggleStatusPopup(citizId) {
   $.post("../php/toggle_citizen_status.php", {"id": citizId, "wanted": $("#citizInfoStatus").attr("class").includes("success")}, function(e) {
-    e = JSON.parse(e);
+    try {
+      e = JSON.parse(e);
+    } catch (err) {
+      d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+    }
     if (e["status"] === "Success") {
       if ($("#citizInfoStatus").attr("class").includes("success")) {
         $("#citizInfoStatus").attr("class", "citiz-info-subclass-status btn btn-outline-danger").html("Ricercato");
@@ -67,7 +75,11 @@ function searchUser() {
 
     if (name !== "" || surname !== "") {
       $.post("../php/search_citizen.php", {"name": ((name == undefined) || (name == "") ? "%" : name), "surname": ((surname == undefined) || (surname == "") ? "%" : surname)}, function(e) {
-        e = JSON.parse(e);
+        try {
+          e = JSON.parse(e);
+        } catch (err) {
+          d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+        }
 
         var items = $(".citiz-info-list-container").hide();
         for (var i = 0; i < e["ids"].length; i++) {
@@ -128,7 +140,11 @@ function viewCitiz(citizId) {
   } else {
     localStorage.setItem("viewingCitizen", citizId);
     $.post("../php/user_info.php", {"citizen_id": citizId}, function (e) {
-      e = JSON.parse(e);
+      try {
+        e = JSON.parse(e);
+      } catch (err) {
+        d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+      }
       if (e["status"] === "success") {
         $("#citizInfoName").val(e["info"][0]["name"]);
         $("#citizInfoSurname").val(e["info"][0]["surname"]);
@@ -162,7 +178,11 @@ function viewCitiz(citizId) {
         }
 
         $.post("../php/crimes_manager.php", {"citizen_id": citizId, "type": "count"}, function(e) {
-          e = JSON.parse(e);
+          try {
+            e = JSON.parse(e);
+          } catch (err) {
+            d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+          }
           if (e["status"] === "success") {
             if (e["crimes_count"][0]["COUNT(*)"] === "0") {
               $("#citizInfoCrimesCount").attr("style", "color: green;");
@@ -172,7 +192,11 @@ function viewCitiz(citizId) {
               $("#citizInfoCrimesCount").html(e["crimes_count"][0]["COUNT(*)"] + (e["crimes_count"][0]["COUNT(*)"] === "1" ? " reato commesso." : " reati commessi."));
 
               $.post("../php/crimes_manager.php", {"citizen_id": citizId, "type": "read"}, function(e) {
-                e = JSON.parse(e);
+                try {
+                  e = JSON.parse(e);
+                } catch (err) {
+                  d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+                }
 
                 if (e["status"] === "success") {
                   for (var i = 0; i < e["crimes"].length; i++) {
@@ -268,7 +292,7 @@ function updateCitizen() {
 }
 
 function setJob(name, id) {
-  $("#citizInfoJob").val(name);
+  $("#citizInfoJob").value(name);
   localStorage.setItem("jobId", id);
 }
 
@@ -276,7 +300,11 @@ function removeCitizen() {
   var citizId = localStorage.getItem("viewingCitizen");
 
   $.post("../php/remove_citizen.php", {"citizen_id": citizId}, function(e) {
-    e = JSON.parse(e);
+    try {
+      e = JSON.parse(e);
+    } catch (err) {
+      d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+    }
     if (e["status"] === "success") {
       d_scc("Utente rimosso.");
       $("#citizItem"+citizId).remove();
@@ -315,7 +343,11 @@ function addCrime() {
     d_err_popup("Inserire un crimine valido.");
   } else{
     $.post("../php/crimes_manager.php", {"citizen_id": citizId, "reason": reason, "type": "add"}, function(e) {
-      e = JSON.parse(e);
+      try {
+        e = JSON.parse(e);
+      } catch (err) {
+        d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+      }
       if (e["status"] === "success") {
         viewCitiz(citizId);
       } else if (e["status"] === "failure") {
@@ -334,7 +366,11 @@ function removeCrime(crimeId) {
     d_err_popup("Errore nella rimozione. Ricarica la pagina e se il problema persiste contatta un amministratore.");
   } else {
     $.post("../php/crimes_manager.php", {"crime_id": crimeId, "type": "remove"}, function(e) {
-      e = JSON.parse(e);
+      try {
+        e = JSON.parse(e);
+      } catch (err) {
+        d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+      }
       if (e["status"] === "success") {
         $("#crimeListGroupItem" + crimeId).remove();
         viewCitiz(localStorage.getItem("viewingCitizen"));

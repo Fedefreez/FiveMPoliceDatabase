@@ -34,7 +34,12 @@ function registerDeputy() {
       "role_id": role_id
     }
     $.post("../../php/register_user.php", data, function(e) {
-      e = JSON.parse(e);
+      try {
+        e = JSON.parse(e);
+      } catch (err) {
+        d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+      }
+      
       if (e["status"] === "success") {
         d_not("Utente aggiunto.");
         $("#userList").append('<li class="list-group-item" id="user' + e["user_id"] + '"><div class="user-container"><span class="user-name-and-surname">' + name + " " + surname + '</span><span class=user-info-btn-container"><button class="btn btn-primary" onclick="viewUser(' + e["user_id"] + ');">Info</button></span></div></li>');

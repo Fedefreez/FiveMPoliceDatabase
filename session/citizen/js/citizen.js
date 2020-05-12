@@ -53,7 +53,11 @@ function registerCitizen() {
       "status": status
     }
     $.post("../../php/register_citizen.php", data, function(e) {
-      e = JSON.parse(e);
+      try {
+        e = JSON.parse(e);
+      } catch (err) {
+        d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+      }
       if (e["status"] === "success") {
         window.location.href = "../?action=registrationSuccessful";
       } else if (e["status"] === "failure"){

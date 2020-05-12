@@ -5,7 +5,11 @@ function removeJob(jobId) {
   }
 
   $.post("../../php/job_manager.php", data, function(e) {
-    e = JSON.parse(e);
+    try {
+      e = JSON.parse(e);
+    } catch (err) {
+      d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+    }
     if (e["status"] === "success") {
       $("#job" + jobId).remove();
       d_not("Lavoro rimosso.");
@@ -49,7 +53,11 @@ function addJob() {
   }
 
   $.post("../../php/job_manager.php", data, function(e) {
-    e = JSON.parse(e);
+    try {
+      e = JSON.parse(e);
+    } catch (err) {
+      d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+    }
     if (e["status"] === "success") {
       $("#jobListJobsContainer").append('<li class="list-group-item" id="job' + e["job_id"] + '"><div class="job-container"><span class="job-name">' + jobName + '</span><span class="remove-job-btn-container"><button class="btn btn-danger" onclick="removeJob(' + e["job_id"] + ');">Rimuovi</button></span></div></li>');
     } else if (e["status"] === "failure"){

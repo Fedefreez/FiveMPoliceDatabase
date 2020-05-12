@@ -2,7 +2,11 @@ function login() {
   var pin = $("#user_pin").val();
   if (/^\d+$/.test(pin) && pin !== "") {
     $.post("php/login.php", {"pin": pin}, function (e) {
-      e = JSON.parse(e);
+      try {
+        e = JSON.parse(e);
+      } catch (err) {
+        d_err("Decodifica JSON fallita. Ragione: "  + err.message);
+      }
       if (e["status"] === "success" && e["accepted"] === "true") {
         window.location.href = "intermission/";
       } else if (e["accepted"] === "false") {
