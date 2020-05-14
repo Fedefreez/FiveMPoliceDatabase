@@ -143,6 +143,7 @@
                       }
                     }
                    ?>
+                   <li id="citizSearchNotFoundItem" class="list-group-item" style="display: none;">Nessun riscontro.</li>
                 </ul>
               </div>
               <div class="card-footer" syle="width: 100%">
