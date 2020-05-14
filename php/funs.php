@@ -210,7 +210,7 @@
       $query->bindParam(":role", $role);
       $query->execute();
 
-      return ["status"=>"Success"];
+      return ["status"=>"success"];
     } catch (PDOException $e){
       error_log("Errore funzione createUser: " . $e->getMessage());
       return ["status"=>"failure", "reason"=>"Query fallita. Controlla il log per maggiori informazioni."];
