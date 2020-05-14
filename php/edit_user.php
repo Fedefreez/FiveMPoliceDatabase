@@ -27,8 +27,12 @@
 
   if ($_SERVER["REQUEST_METHOD"] == "POST" && loginCheck()) {
     $user_id = test_input($_POST["user_id"]);
+    $name = test_input($_POST["name"]);
+    $surname = test_input($_POST["surname"]);
+    $pin = test_input($_POST["pin"]);
+    $role_id = test_input($_POST["role_id"]);
 
-    echo json_encode(getUserInfo($user_id));
+    echo json_encode(editUserInfo($user_id, $name, $surname, $pin, $role_id));
   } else {
     echo json_encode(["status"=>"failure", "reason"=>"Invalid request."]);
   }

@@ -139,7 +139,7 @@
                   if (($users = getAllUsers())["status"] === "success") {
                     foreach ($users["users"] as $user) {
                       echo '<li class="list-group-item" id="user' . $user["id"] . '">';
-                      echo '<div class="user-container"><span class="user-name-and-surname">' . $user["name"] . " " . $user["surname"] . '</span><span class=user-info-btn-container"><button class="btn btn-primary" onclick="viewUser(' . $user["id"] . ');">Info</button></span></div></li>';
+                      echo '<div class="user-container"><span class="user-name-and-surname">' . $user["name"] . " " . $user["surname"] . '</span><span class=user-info-btn-container"><button class="btn btn-danger" onclick="removeUser(' . $user["id"] . ');">Rimuovi</button><span class="col-sm-1" role="separator"></span><button class="btn btn-primary" data-toggle="modal" data-target="#userInfoPopup" onclick="viewUser(' . $user["id"] . ');">Info</button></span></div></li>';
                     }
                   } else {
                     echo $jobs["reason"];
@@ -197,6 +197,45 @@
 
   <!-- /#wrapper -->
 
+  <div class="modal fade" id="userInfoPopup" tabindex="-1" role="dialog" aria-labelledby="userInfoPopup" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Info utente</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="popupAlerts"></div>
+          Nome: <input id="userInfoName" value="Caricamento..." class="form-control" disabled/>
+          Cognome: <input id="userInfoSurname" value="Caricamento..." class="form-control" disabled/>
+          PIN: <input id="userInfoPIN" type="number" value="Caricamento..." class="form-control" disabled/>
+          <br/>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="userInfoRoleBtn" disabled><i class="fa fa-address-book"></i><span style="padding-left: 5px;">Ruolo</span></button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" onclick="$('#userInfoRole').val('Questore'); localStorage.setItem('RoleId', 1);">Questore</a>
+                <a class="dropdown-item" onclick="$('#userInfoRole').val('Ispettore capo'); localStorage.setItem('RoleId', 2);">Ispettore capo</a>
+                <a class="dropdown-item" onclick="$('#userInfoRole').val('Tenente'); localStorage.setItem('RoleId', 3);">Tenente</a>
+                <a class="dropdown-item" onclick="$('#userInfoRole').val('Agente Scelto'); localStorage.setItem('RoleId', 14);">Agente Scelto</a>
+                <a class="dropdown-item" onclick="$('#userInfoRole').val('Recluta'); localStorage.setItem('RoleId', 4);">Recluta</a>
+                <a class="dropdown-item" onclick="$('#userInfoRole').val('Amministratore'); localStorage.setItem('RoleId', 5);">Amministratore</a>
+              </div>
+            </div>
+            <input type="text" class="form-control" value="Caricamento..." id="userInfoRole" disabled>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="editUserInfoBtn" onclick="unlockUserInfo()">Modifica dati</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <!-- Bootstrap core JavaScript -->
   <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
@@ -224,6 +263,13 @@
           clearInterval(interval);
         }
       }, 1000);
+
+      $('#userInfoPopup').on('hidden.bs.modal', function () {
+          if (localStorage.getItem("editingCitizenInfo") === "true") {
+            alert("Attenzione: non hai salvato le modifiche alle informazioni del cittadino, la prossima volta ricorda di cliccare salva prima di chiudere il menú per evitare problemi.\nLe modifiche sono state salvate automaticamente.");
+            lockUserInfo();
+          }
+      });
     });
   </script>
 

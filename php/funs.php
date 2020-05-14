@@ -21,16 +21,35 @@
 
   function getUserInfo($user_UUID) : Array {
     try {
-      $query = connectDb()->prepare("SELECT user.name, user.surname, user_role.name AS role FROM user, user_role WHERE (user.user_role_id = user_role.id) AND (user.id = :id)");
+      $query = connectDb()->prepare("SELECT user.name, user.surname, user.pin, user_role.name AS role FROM user, user_role WHERE (user.user_role_id = user_role.id) AND (user.id = :id)");
       $query->bindParam(":id", $user_UUID);
       $query->execute();
       if (!empty(($result = $query->fetchAll()[0]))) {
-        return $result;
+        return ["status"=>"success", "info"=>$result];
       } else {
         return ["status"=>"General failure"];
       }
     } catch (PDOException $e) {
       return ["status"=>"General failure"];
+    } finally {
+      $conn = null;
+    }
+  }
+
+  function editUserInfo($user_UUID, $name, $surname, $pin, $role_id) {
+    try {
+      $query = connectDb()->prepare("UPDATE user SET name = :name, surname = :surname, pin = :pin, user_role_id = :role_id WHERE id = :id");
+      $query->bindParam(":name", $name);
+      $query->bindParam(":surname", $surname);
+      $query->bindParam(":pin", $pin);
+      $query->bindParam(":id", $user_UUID);
+      $query->bindParam(":role_id", $role_id);
+      $query->execute();
+
+      return ["status"=>"success"];
+    } catch (PDOException $e) {
+      error_log("Errore funzione editUserInfo: " . $e->getMessage());
+      return ["status"=>"failure", "reason"=>"Query fallita. Controlla il log per maggiori informazioni."];
     } finally {
       $conn = null;
     }
@@ -214,7 +233,7 @@
         $query->bindParam(":id", $id);
         $query->execute();
 
-        return ["status"=>"Success"];
+        return ["status"=>"success"];
       } catch (PDOException $e){
         error_log("Errore funzione deleteUser: " . $e->getMessage());
         return ["status"=>"failure", "reason"=>"Query fallita. Controlla il log per maggiori informazioni."];

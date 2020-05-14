@@ -96,7 +96,7 @@
             if (isset($info["status"]) && $info["status"] === "General failure") {
               echo "<script>setTimeout(function(){location.reload();}, 5000);</script>Errore generale. Riavvio pagina in 5 secondi...";
             } else {
-              echo "Acceso eseguito come<strong> " . $info["name"] . " " . $info["surname"] . "</strong>, con ruolo di <strong>" . $info["role"] . "</strong>.";
+              echo "Acceso eseguito come<strong> " . $info["info"]["name"] . " " . $info["info"]["surname"] . "</strong>, con ruolo di <strong>" . $info["info"]["role"] . "</strong>.";
             }
              ?>
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -275,7 +275,7 @@
 
       $('#citizInfoPopup').on('hidden.bs.modal', function () {
           if (localStorage.getItem("editingCitizenInfo") === "true") {
-            alert("Attenzione: non hai salvato le modifiche alle informazione del cittadino, la prossima volta ricorda di cliccare salva prima di chiudere il menú per evitare problemi.\nLe modifiche sono state salvate automaticamente.");
+            alert("Attenzione: non hai salvato le modifiche alle informazioni del cittadino, la prossima volta ricorda di cliccare salva prima di chiudere il menú per evitare problemi.\nLe modifiche sono state salvate automaticamente.");
             saveCitizData();
           }
       });

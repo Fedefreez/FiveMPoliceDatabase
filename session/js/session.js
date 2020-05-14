@@ -139,7 +139,7 @@ function viewCitiz(citizId) {
     d_err("Errore. Contatta un amministratore e salva la seguente informazione: {CitizId: }" + citizId);
   } else {
     localStorage.setItem("viewingCitizen", citizId);
-    $.post("../php/user_info.php", {"citizen_id": citizId}, function (e) {
+    $.post("../php/citizen_info.php", {"citizen_id": citizId}, function (e) {
       try {
         e = JSON.parse(e);
       } catch (err) {
