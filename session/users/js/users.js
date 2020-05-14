@@ -178,7 +178,7 @@ function saveUserData(id) {
 
 function removeUser(id) {
   if (id == "" || id == undefined || !(/^\d+$/.test(id))) {
-    d_err("Errore nella lettura dei dati dal localStorage. Ricarica la pagina oppure contatta un amministratore.");
+    d_err("Errore nella lettura dei dati. Ricarica la pagina oppure contatta un amministratore.");
   } else {
     $.post("../../php/remove_user.php", {"user_id": id}, function(e) {
       try {

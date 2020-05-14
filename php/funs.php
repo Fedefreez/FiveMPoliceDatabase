@@ -210,7 +210,10 @@
       $query->bindParam(":role", $role);
       $query->execute();
 
-      return ["status"=>"success"];
+      $query = $conn->query("SELECT last_insert_id()");
+      $result = $query->fetchAll();
+
+      return ["status"=>"success", "user_id"=>$result[0]["last_insert_id()"]];
     } catch (PDOException $e){
       error_log("Errore funzione createUser: " . $e->getMessage());
       return ["status"=>"failure", "reason"=>"Query fallita. Controlla il log per maggiori informazioni."];
