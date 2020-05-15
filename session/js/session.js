@@ -66,7 +66,7 @@ function searchUser() {
   } else {
     var keys = key.split(" ");
     if (keys.length != 2) {
-      var name = keys[0];
+      var name = keys[0].replace(".", " ");
       var surname = "%";
     } else {
       var name = keys[0].replace(".", " ");
