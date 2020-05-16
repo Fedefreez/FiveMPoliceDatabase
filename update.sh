@@ -1,13 +1,13 @@
 #!/bin/bash
 echo "Aggiornamento database polizia in corso...";
 cd /var/www/html/database/polizia;
-git fetch;
-git pull;
+sudo git fetch;
+sudo git pull;
 echo "Controllo modifiche...";
-git status -uno;
+sudo git status -uno;
 echo "Controllo eseguito!";
 echo "Aggiunta permesso eseguibile...";
-chmod +x ./update.sh
+sudo chmod +x ./update.sh
 echo "Fatto."
 md5=md5sum ./update.sh;
 sha1=sha1sum ./update.sh;
