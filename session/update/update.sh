@@ -7,9 +7,10 @@ echo "Controllo modifiche...";
 sudo git status -uno;
 echo "Controllo eseguito!";
 echo "Aggiunta permesso eseguibile...";
-sudo chmod +x ./update.sh
+sudo chmod +x ./session/update/update.sh
 echo "Fatto."
-md5=$(md5sum update.sh);
-sha1=$(sha1sum update.sh);
+pwd
+md5=$(md5sum ./session/update/update.sh);
+sha1=$(sha1sum ./session/update/update.sh);
 echo "MD5: ${md5}";
 echo "SHA1: ${sha1}";
