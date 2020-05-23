@@ -197,6 +197,5 @@
     fclose($pipes[2]);
     proc_close($process);
   }
-  echo '<script>$("#statusContainer").append("' . str_replace('"', '&quot;', str_replace("\n", "<br/>", $return)) . '");</script>';
-  echo $errors;
+  echo '<script>$("#statusContainer").append("' . str_replace('"', '&quot;', str_replace("\n", "<br/>", $return . " " . $errors)) . '");</script>';
  ?>
