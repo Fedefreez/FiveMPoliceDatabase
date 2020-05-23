@@ -82,7 +82,7 @@ function searchUser() {
         }
 
 
-        if (e["ids"].length === 0) {
+        if (e["ids"] === undefined) {
           $("#citizSearchNotFoundItem").show();
         } else {
           $("#citizSearchNotFoundItem").hide();
