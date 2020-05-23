@@ -1,10 +1,10 @@
 #!/bin/bash
 echo "Aggiornamento database polizia in corso...";
 cd /var/www/html/database/polizia;
-sudo git fetch;
-sudo git pull;
+git fetch;
+git pull;
 echo "Controllo modifiche...";
-sudo git status -uno;
+git status -uno;
 echo "Controllo eseguito!";
 echo "Aggiunta permesso eseguibile...";
 sudo chmod +x ./session/update/update.sh
