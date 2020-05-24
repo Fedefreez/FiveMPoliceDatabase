@@ -81,12 +81,12 @@ function searchUser() {
           d_err("Decodifica JSON fallita. Ragione: "  + err.message);
         }
 
+        $(".citiz-info-list-container").hide();
 
         if (e["ids"] === undefined) {
           $("#citizSearchNotFoundItem").show();
         } else {
           $("#citizSearchNotFoundItem").hide();
-          $(".citiz-info-list-container").hide();
 
           for (var i = 0; i < e["ids"].length; i++) {
             $("#citizItem"+e["ids"][i]["id"]).show();
