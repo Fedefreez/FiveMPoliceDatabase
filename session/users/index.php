@@ -256,7 +256,7 @@
     });
     $(document).ready(function() {
       localStorage.clear();
-      localStorage.setItem("RoleId", 1);
+      localStorage.setItem("RoleId", 4);
       interval = setInterval(function() {
         if (document.getElementsByTagName('html')[0].getAttribute('class') === "translated-ltr") {
           d_err("Se le scritte all'interno del sito sembrano sfasate, disabilita Google Traduttore.");
