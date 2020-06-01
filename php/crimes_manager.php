@@ -33,7 +33,7 @@
       case "remove":
         if (empty(($crime_id = test_input($_POST["crime_id"])))) {
           echo json_encode(["status"=>"failure", "reason"=>"Nessun dato fornito."]);
-        } else if (isUserChief($_SESSION["user_uuid"]){
+        } elseif (isUserChief($_SESSION["user_uuid"]) {
           echo json_encode(removeCrime($crime_id));
         } else {
           echo json_encode(["status"=>"failure", "reason"=>"Non sei autorizzato a rimuovere crimini."]);
