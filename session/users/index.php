@@ -148,7 +148,7 @@
              </ul>
             </div>
             <div class="card-footer">
-              Database polizia v2.54 - The Final Road
+              Database polizia v2.55 - The Final Road
             </div>
           </div>
           <span class="col-sm-1" role="separator"></span>

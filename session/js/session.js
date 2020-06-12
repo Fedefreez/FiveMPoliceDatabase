@@ -64,33 +64,26 @@ function searchUser() {
   if (key == "" || key == undefined) {
     d_err("Inserire una chiave di ricerca valida.");
   } else {
-    var keys = key.split(" ");
-    if (keys.length != 2) {
-      var name = keys[0].replace(".", " ");
-      var surname = "%";
-    } else {
-      var name = keys[0].replace(".", " ");
-      var surname = keys[1].replace(".", " ");
-    }
+    if (key !== "") {
+      $.post("../php/get_citizen_info_search.php", {}, function(response) {
+        $("#citizSearchNotFoundItem").show();
 
-    if (name !== "" || surname !== "") {
-      $.post("../php/search_citizen.php", {"name": ((name == undefined) || (name == "") ? "%" : name), "surname": ((surname == undefined) || (surname == "") ? "%" : surname)}, function(e) {
+        var allCitizens = {};
         try {
-          e = JSON.parse(e);
+          allCitizens = JSON.parse(response);
         } catch (err) {
           d_err("Decodifica JSON fallita. Ragione: "  + err.message);
         }
 
-        $(".citiz-info-list-container").hide();
-
-        if (e["ids"] === undefined) {
-          $("#citizSearchNotFoundItem").show();
+        if (allCitizens["status"] === "success") {
+          allCitizens.forEach((currentCitiz, i) => {
+            if (currentCitiz["name"].indexOf(key) != -1) {
+              $("#citizSearchNotFoundItem").hide();
+              $("#citizItem"+currentCitiz["id"]).show();
+            }
+          });
         } else {
-          $("#citizSearchNotFoundItem").hide();
-
-          for (var i = 0; i < e["ids"].length; i++) {
-            $("#citizItem"+e["ids"][i]["id"]).show();
-          }
+          d_err("Errore nella ricerca, il server ha risposto con: " + allCitizens["reason"]);
         }
       }).fail(function() {
         d_err("Il server non risponde, forse a causa di un errore interno. Contatta un amministratore.");
